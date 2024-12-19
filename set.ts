@@ -1,55 +1,56 @@
-/**
- * Sort numeric array in ascending order.
- * @access private
- * @template {bigint | number} T
- * @param {T} a
- * @param {T} b
- * @returns {number}
- */
-function sortNumericAscend<T extends bigint | number>(a: T, b: T): number {
-	if (a < b) {
-		return -1;
-	}
-	if (a > b) {
-		return 1;
-	}
-	return 0;
-}
-interface SetationSetIndexIteratorParameters {
-	allowRepeat?: boolean;
-	chain?: number[];
-	set: number[];
-	size: number;
-}
-/**
- * Iterate set index.
- * @access private
- * @param {SetationSetIndexIteratorParameters} param0
- * @returns {Generator<number[]>}
- */
-function* setationSetIndexIterator({
-	allowRepeat = false,
-	chain = [],
-	set,
-	size
-}: SetationSetIndexIteratorParameters): Generator<number[]> {
+import { sortNumerics } from "https://raw.githubusercontent.com/hugoalh/sort-es/v0.1.1/numerics.ts";
+function* setationSetIndexIterator(set: readonly number[], size: number, allowRepeat: boolean, chain: readonly number[] = []): Generator<readonly number[]> {
 	for (const value of set) {
-		const chainNew: number[] = [...chain, value];
-		if (chainNew.length === size) {
-			yield chainNew;
+		const result: readonly number[] = [...chain, value];
+		if (result.length === size) {
+			yield result;
 		} else {
-			yield* setationSetIndexIterator({
-				allowRepeat,
-				chain: chainNew,
-				set: allowRepeat ? set : set.filter((index: number): boolean => {
-					return (index !== value);
-				}),
-				size
+			yield* setationSetIndexIterator(allowRepeat ? set : set.filter((index: number): boolean => {
+				return (index !== value);
+			}), size, allowRepeat, result);
+		}
+	}
+}
+export interface SetationSetOptions {
+	/**
+	 * Whether to allow the elements repeat appear in the same subset.
+	 * @default {false}
+	 */
+	allowRepeat?: boolean;
+}
+function* setationSetIterator<T>(considerOrder: boolean, set: readonly T[], sizes: number[], options: Required<SetationSetOptions>): Generator<T[]> {
+	const { allowRepeat }: Required<SetationSetOptions> = options;
+	if (
+		set.length === 0 ||
+		sizes.length === 0
+	) {
+		yield [];
+		return;
+	}
+	for (const size of sizes) {
+		if (size === 0) {
+			yield [];
+			continue;
+		}
+		const subsetStorage: Set<string> = new Set<string>();
+		for (const indexes of setationSetIndexIterator(set.map((_value: T, index: number): number => {
+			return index;
+		}), size, allowRepeat)) {
+			const indexesFmt: readonly number[] = considerOrder ? indexes : sortNumerics(indexes);
+			const token: string = indexesFmt.map((index: number): string => {
+				return String(index);
+			}).join(",");
+			if (subsetStorage.has(token)) {
+				continue;
+			}
+			subsetStorage.add(token);
+			yield indexesFmt.map((index: number): T => {
+				return set[index];
 			});
 		}
 	}
 }
-export interface SetationSetSizeOptions {
+export interface SetationSetSizeRange {
 	/**
 	 * Maximum size of the subset.
 	 */
@@ -59,128 +60,61 @@ export interface SetationSetSizeOptions {
 	 */
 	minimum: number;
 }
-export interface SetationSetOptions {
-	/**
-	 * Whether to allow the same element repeat appear in the same subset.
-	 * 
-	 * When this value is `true`, require property {@linkcode size}.
-	 * @default false
-	 */
-	allowRepeat?: boolean;
-	/**
-	 * Size of the subset.
-	 * @default undefined
-	 */
-	size?: number | number[] | SetationSetSizeOptions;
-}
-interface SetationSetParameters<T> extends SetationSetOptions {
-	considerOrder: boolean;
-	set: T[] | Set<T>;
-}
-function* setationSet<T>({
-	allowRepeat = false,
-	considerOrder,
-	size,
-	set
-}: SetationSetParameters<T>): Generator<T[]> {
-	const setFmt: T[] = (set instanceof Set) ? Array.from(set.values()) : [...set];
+function setationSet<T>(considerOrder: boolean, set: readonly T[] | Set<T>, size: number | number[] | SetationSetSizeRange, options: SetationSetOptions = {}): Generator<T[]> {
+	const { allowRepeat = false }: SetationSetOptions = options;
+	const setFmt: readonly T[] = (set instanceof Set) ? Array.from(set.values()) : set;
 	const sizesResolve: number[] = [];
-	if (allowRepeat && (
-		typeof size === "undefined" ||
-		(Array.isArray(size) && size.length === 0)
-	)) {
-		throw new SyntaxError(`Parameter \`options.size\` must be defined when parameter \`options.allowRepeat\` is \`true\`!`);
-	}
-	if (typeof size === "undefined") {
-		for (let index = 1; index <= setFmt.length; index += 1) {
-			sizesResolve.push(index);
-		}
-	} else if (
+	if (
 		typeof size === "number" ||
 		Array.isArray(size)
 	) {
-		const sizesRaw: number[] = Array.isArray(size) ? size : [size];
-		sizesRaw.forEach((value: number, index: number): void => {
-			if (
-				!(Number.isSafeInteger(value) && value >= 0) ||
-				(!allowRepeat && !(value <= setFmt.length))
-			) {
-				throw new TypeError(`\`${value}\` (parameter \`options.size[${index}]\`) is not a number which is integer, positive, safe and <= ${setFmt.length}!`);
+		for (const value of (Array.isArray(size) ? size : [size])) {
+			if (!(Number.isSafeInteger(value) && value >= 0)) {
+				throw new TypeError(`\`${value}\` (parameter \`options.size\`) is not a number which is integer, positive, and safe!`);
 			}
-		});
-		sizesResolve.push(...sizesRaw);
+			if (!allowRepeat && !(value <= setFmt.length)) {
+				throw new RangeError(`Size \`${value}\` is too large for the no elements repeat subset! Expect: <= ${setFmt.length}.`);
+			}
+			sizesResolve.push(value);
+		}
 	} else {
-		const { maximum: sizeMaximum, minimum: sizeMinimum } = size;
-		if (
-			!(Number.isSafeInteger(sizeMaximum) && sizeMaximum >= 0) ||
-			(!allowRepeat && !(sizeMaximum <= setFmt.length))
-		) {
-			throw new RangeError(`\`${sizeMaximum}\` (parameter \`options.size.maximum\`) is not a number which is integer, positive${allowRepeat ? " and safe" : `, safe, and <= ${setFmt.length}`}!`);
+		if (!(Number.isSafeInteger(size.maximum) && size.maximum >= 0)) {
+			throw new TypeError(`\`${size.maximum}\` (parameter \`options.size.maximum\`) is not a number which is integer, positive, and safe!`);
 		}
-		if (!(Number.isSafeInteger(sizeMinimum) && sizeMinimum >= 0 && sizeMinimum <= sizeMaximum)) {
-			throw new RangeError(`\`${sizeMinimum}\` (parameter \`options.size.minimum\`) is not a number which is integer, positive, safe, and <= ${sizeMaximum}!`);
+		if (!allowRepeat && !(size.maximum <= setFmt.length)) {
+			throw new RangeError(`Maximum size \`${size.maximum}\` is too large for the no elements repeat subset! Expect: <= ${setFmt.length}.`);
 		}
-		for (let index: number = sizeMinimum; index <= sizeMaximum; index += 1) {
+		if (!(Number.isSafeInteger(size.minimum) && size.minimum >= 0)) {
+			throw new TypeError(`\`${size.minimum}\` (parameter \`options.size.minimum\`) is not a number which is integer, positive, and safe!`);
+		}
+		if (!(size.minimum <= size.maximum)) {
+			throw new RangeError(`Minimum size \`${size.minimum}\` is too large for the no elements repeat subset! Expect: <= ${size.maximum}.`);
+		}
+		for (let index: number = size.minimum; index <= size.maximum; index += 1) {
 			sizesResolve.push(index);
 		}
 	}
-	if (
-		setFmt.length === 0 ||
-		sizesResolve.length === 0
-	) {
-		yield [];
-		return;
-	}
-	for (const sizeResolve of sizesResolve) {
-		if (sizeResolve === 0) {
-			yield [];
-			continue;
-		}
-		const patternsStorage: Set<string> = new Set<string>();
-		for (const resultIndex of setationSetIndexIterator({
-			allowRepeat,
-			set: setFmt.map((_value: T, index: number): number => {
-				return index;
-			}),
-			size: sizeResolve
-		})) {
-			const resultIndexResolve: number[] = considerOrder ? resultIndex : resultIndex.sort(sortNumericAscend);
-			const resultIndexResolveToken: string = JSON.stringify(resultIndexResolve);
-			if (patternsStorage.has(resultIndexResolveToken)) {
-				continue;
-			}
-			patternsStorage.add(resultIndexResolveToken);
-			yield resultIndexResolve.map((value: number): T => {
-				return setFmt[value];
-			});
-		}
-	}
+	return setationSetIterator(considerOrder, setFmt, sizesResolve, { allowRepeat });
 }
 /**
- * List combinations from a set.
+ * List combinations from the set.
  * @template {unknown} T
- * @param {T[] | Set<T>} set Set.
+ * @param {readonly T[] | Set<T>} set Set.
+ * @param {number | number[] | SetationSetSizeRange} size Size of the subset.
  * @param {SetationSetOptions} [options={}] Options.
  * @returns {Generator<T[]>} A combinations subset generator.
  */
-export function combinationSet<T>(set: T[] | Set<T>, options?: SetationSetOptions): Generator<T[]> {
-	return setationSet<T>({
-		...options,
-		considerOrder: false,
-		set
-	});
+export function combinationSet<T>(set: readonly T[] | Set<T>, size: number | number[] | SetationSetSizeRange, options?: SetationSetOptions): Generator<T[]> {
+	return setationSet<T>(false, set, size, options);
 }
 /**
- * List permutations from a set.
+ * List permutations from the set.
  * @template {unknown} T
- * @param {T[] | Set<T>} set Set.
+ * @param {readonly T[] | Set<T>} set Set.
+ * @param {number | number[] | SetationSetSizeRange} size Size of the subset.
  * @param {SetationSetOptions} [options={}] Options.
  * @returns {Generator<T[]>} A permutations subset generator.
  */
-export function permutationSet<T>(set: T[] | Set<T>, options: SetationSetOptions = {}): Generator<T[]> {
-	return setationSet<T>({
-		...options,
-		considerOrder: true,
-		set
-	});
+export function permutationSet<T>(set: readonly T[] | Set<T>, size: number | number[] | SetationSetSizeRange, options?: SetationSetOptions): Generator<T[]> {
+	return setationSet<T>(true, set, size, options);
 }

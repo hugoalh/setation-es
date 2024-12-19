@@ -6,7 +6,7 @@
 [![JSR: @hugoalh/setation](https://img.shields.io/jsr/v/@hugoalh/setation?label=@hugoalh/setation&labelColor=F7DF1E&logo=jsr&logoColor=000000&style=flat "JSR: @hugoalh/setation")](https://jsr.io/@hugoalh/setation)
 [![NPM: @hugoalh/setation](https://img.shields.io/npm/v/@hugoalh/setation?label=@hugoalh/setation&labelColor=CB3837&logo=npm&logoColor=ffffff&style=flat "NPM: @hugoalh/setation")](https://www.npmjs.com/package/@hugoalh/setation)
 
-An ES (JavaScript & TypeScript) module to list permutations and combinations from a set.
+An ES (JavaScript & TypeScript) module to list permutations or combinations from the collection or set.
 
 ## 🔰 Begin
 
@@ -55,26 +55,15 @@ An ES (JavaScript & TypeScript) module to list permutations and combinations fro
 ## 🧩 APIs
 
 - ```ts
-  function combinationMatrix<V>(set: { [x: string]: V[]; }): Generator<{ [x: string]: V; }>;
-  function combinationMatrix<K, V>(set: Map<K, V[]>): Generator<Map<K, V>>;
+  function combinationCollection<V>(item: { [x: string]: V[]; }): Generator<{ [x: string]: V; }>;
+  function combinationCollection<K, V>(item: Map<K, V[]>): Generator<Map<K, V>>;
+  function combinationCollection<V>(item: Record<string, V[]>): Generator<Record<string, V>>;
   ```
 - ```ts
-  function combinationSet<T>(set: T[] | Set<T>, options?: SetationSetOptions): Generator<T[]>;
+  function combinationSet<T>(set: readonly T[] | Set<T>, size: number | number[] | SetationSetSizeRange, options?: SetationSetOptions): Generator<T[]>
   ```
 - ```ts
-  function permutationSet<T>(set: T[] | Set<T>, options?: SetationSetOptions): Generator<T[]>;
-  ```
-- ```ts
-  interface SetationSetOptions {
-    allowRepeat?: boolean;
-    size?: number | number[] | SetationSetSizeOptions;
-  }
-  ```
-- ```ts
-  interface SetationSetSizeOptions {
-    maximum: number;
-    minimum: number;
-  }
+  function permutationSet<T>(set: readonly T[] | Set<T>, size: number | number[] | SetationSetSizeRange, options?: SetationSetOptions): Generator<T[]>
   ```
 
 > [!NOTE]
@@ -87,7 +76,7 @@ An ES (JavaScript & TypeScript) module to list permutations and combinations fro
 - ```js
   const item = ["a", "b", "c", "d", "e", "f"];
 
-  Array.from(combinationSet(item, { size: 3 }));
+  Array.from(combinationSet(item, 3));
   /*=>
   [
     [ "a", "b", "c" ], [ "a", "b", "d" ],
@@ -103,7 +92,7 @@ An ES (JavaScript & TypeScript) module to list permutations and combinations fro
   ]
   */
 
-  Array.from(permutationSet(item, { size: 3 }));
+  Array.from(permutationSet(item, 3));
   /*=>
   [
     [ "a", "b", "c" ], [ "a", "b", "d" ],
@@ -131,7 +120,7 @@ An ES (JavaScript & TypeScript) module to list permutations and combinations fro
   */
   ```
 - ```js
-  Array.from(combinationMatrix({ foo: [1, 2, 3], bar: [4, 5, 6] }));
+  Array.from(combinationCollection({ foo: [1, 2, 3], bar: [4, 5, 6] }));
   /*=>
   [
     { foo: 1, bar: 4 }, { foo: 1, bar: 5 },

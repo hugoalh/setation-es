@@ -1,13 +1,14 @@
 {
 	"$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
 	"name": "@hugoalh/setation",
-	"version": "2.0.0",
+	"version": "2.0.0-beta.1",
 	"exports": {
-		"./matrix": "./matrix.ts",
+		"./collection": "./collection.ts",
 		"./set": "./set.ts",
 		".": "./mod.ts"
 	},
 	"imports": {
+		"https://raw.githubusercontent.com/hugoalh/sort-es/v0.1.1/numerics.ts": "jsr:@hugoalh/sort@^0.1.1/numerics"
 	},
 	"publish": {
 		"exclude": [

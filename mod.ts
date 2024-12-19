@@ -1,2 +1,7 @@
-export { combinationMatrix } from "./matrix.ts";
-export { combinationSet, permutationSet, type SetationSetOptions, type SetationSetSizeOptions } from "./set.ts";
+export { combinationCollection } from "./collection.ts";
+export {
+	combinationSet,
+	permutationSet,
+	type SetationSetOptions,
+	type SetationSetSizeRange,
+} from "./set.ts";
