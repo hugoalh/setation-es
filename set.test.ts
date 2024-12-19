@@ -1,5 +1,5 @@
-import { assertEquals } from "STD/assert/assert-equals";
-import { assertThrows } from "STD/assert/assert-throws";
+import { assertEquals } from "STD/assert/equals";
+import { assertThrows } from "STD/assert/throws";
 import { combinationSet, permutationSet } from "./set.ts";
 const set1 = ["a", "b", "c", "d", "e", "f"];
 Deno.test("1 Combination AllowRepeat 3", { permissions: "none" }, () => {

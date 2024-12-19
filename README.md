@@ -2,8 +2,8 @@
 
 [**⚖️** MIT](./LICENSE.md)
 
-[![GitHub: hugoalh-studio/setation-es](https://img.shields.io/github/v/release/hugoalh-studio/setation-es?label=hugoalh-studio/setation-es&labelColor=181717&logo=github&logoColor=ffffff&sort=semver&style=flat "GitHub: hugoalh-studio/setation-es")](https://github.com/hugoalh-studio/setation-es)
-[![JSR: @hugoalh/setation](https://img.shields.io/jsr/v/@hugoalh/setation?label=JSR%20@hugoalh/setation&labelColor=F7DF1E&logoColor=000000&style=flat "JSR: @hugoalh/setation")](https://jsr.io/@hugoalh/setation)
+[![GitHub: hugoalh/setation-es](https://img.shields.io/github/v/release/hugoalh/setation-es?label=hugoalh/setation-es&labelColor=181717&logo=github&logoColor=ffffff&sort=semver&style=flat "GitHub: hugoalh/setation-es")](https://github.com/hugoalh/setation-es)
+[![JSR: @hugoalh/setation](https://img.shields.io/jsr/v/@hugoalh/setation?label=@hugoalh/setation&labelColor=F7DF1E&logo=jsr&logoColor=000000&style=flat "JSR: @hugoalh/setation")](https://jsr.io/@hugoalh/setation)
 [![NPM: @hugoalh/setation](https://img.shields.io/npm/v/@hugoalh/setation?label=@hugoalh/setation&labelColor=CB3837&logo=npm&logoColor=ffffff&style=flat "NPM: @hugoalh/setation")](https://www.npmjs.com/package/@hugoalh/setation)
 
 An ES (JavaScript & TypeScript) module to list permutations and combinations from a set.
@@ -12,54 +12,45 @@ An ES (JavaScript & TypeScript) module to list permutations and combinations fro
 
 ### 🎯 Targets
 
-|  | **Registry - JSR** | **Registry - NPM** | **Remote Import** |
+|  | **Remote** | **JSR** | **NPM** |
 |:--|:--|:--|:--|
-| **[Bun](https://bun.sh/)** >= v1.1.0 | [✔️ `node_modules`](https://jsr.io/docs/npm-compatibility) | [✔️ Specifier `npm:`](https://bun.sh/docs/runtime/autoimport) | ❌ |
-| **[Cloudflare Workers](https://workers.cloudflare.com/)** | [✔️ `node_modules`](https://jsr.io/docs/with/cloudflare-workers) | [✔️ `node_modules`](https://docs.npmjs.com/using-npm-packages-in-your-projects) | ❌ |
-| **[Deno](https://deno.land/)** >= v1.42.0 | [✔️ Specifier `jsr:`](https://jsr.io/docs/with/deno) | [✔️ Specifier `npm:`](https://docs.deno.com/runtime/manual/node/npm_specifiers) | [✔️](https://docs.deno.com/runtime/manual/basics/modules/#remote-import) |
-| **[NodeJS](https://nodejs.org/)** >= v16.13.0 | [✔️ `node_modules`](https://jsr.io/docs/with/node) | [✔️ `node_modules`](https://docs.npmjs.com/using-npm-packages-in-your-projects) | ❌ |
+| **[Bun](https://bun.sh/)** >= v1.1.0 | ❌ | ❓ | ✔️ |
+| **[Cloudflare Workers](https://workers.cloudflare.com/)** | ❌ | ❓ | ✔️ |
+| **[Deno](https://deno.land/)** >= v1.42.0 | ✔️ | ✔️ | ✔️ |
+| **[NodeJS](https://nodejs.org/)** >= v16.13.0 | ❌ | ❓ | ✔️ |
 
-> **ℹ️ Note**
->
-> It is possible to use this module in other methods/ways which not listed in here, however it is not officially supported.
+> [!NOTE]
+> - It is possible to use this module in other methods/ways which not listed in here, however those methods/ways are not officially supported, and should beware maybe cause security issues.
 
-### #️⃣ Registries Identifier
+### #️⃣ Resources Identifier
 
+- **Remote - GitHub Raw:**
+  ```
+  https://raw.githubusercontent.com/hugoalh/setation-es/{Tag}/mod.ts
+  ```
 - **JSR:**
   ```
-  @hugoalh/setation
+  [jsr:]@hugoalh/setation[@{Tag}]
   ```
 - **NPM:**
   ```
-  @hugoalh/setation
+  [npm:]@hugoalh/setation[@{Tag}]
   ```
 
-> **ℹ️ Note**
+> [!NOTE]
+> - For usage of remote resources, it is recommended to import the entire module with the main path `mod.ts`, however it is also able to import part of the module with sub path if available, but do not import if:
 >
-> - Although it is recommended to import the entire module, it is also able to import part of the module with sub path if available, please visit [file `jsr.jsonc`](./jsr.jsonc) property `exports` for available sub paths.
-> - It is recommended to use this module with tag for immutability.
-
-### #️⃣ Remote Import Paths
-
-- **GitHub Raw:** (Require Tag)
-  ```
-  https://raw.githubusercontent.com/hugoalh-studio/setation-es/${Tag}/mod.ts
-  ```
-
-> **ℹ️ Note**
->
-> - Although it is recommended to import the entire module with the main path `mod.ts`, it is also able to import part of the module with sub path if available, but do not import if:
->
->   - it's file path has an underscore prefix (e.g.: `_foo.ts`, `_util/bar.ts`), or
+>   - it's path has an underscore prefix (e.g.: `_foo.ts`, `_util/bar.ts`), or
 >   - it is a benchmark or test file (e.g.: `foo.bench.ts`, `foo.test.ts`), or
->   - it's symbol has an underscore prefix (e.g.: `export function _baz() {}`).
+>   - it's symbol has an underscore prefix (e.g.: `_bar`, `_foo`).
 >
 >   These elements are not considered part of the public API, thus no stability is guaranteed for them.
-> - Although there have 3rd party services which provide enhanced, equal, or similar methods/ways to remote import the module, beware these services maybe inject unrelated elements and thus affect the security.
+> - For usage of JSR or NPM resources, it is recommended to import the entire module with the main entrypoint, however it is also able to import part of the module with sub entrypoint if available, please visit the [file `jsr.jsonc`](./jsr.jsonc) property `exports` for available sub entrypoints.
+> - It is recommended to use this module with tag for immutability.
 
-### 🛡️ Permissions
+### 🛡️ Runtime Permissions
 
-*This module does not require any permission.*
+*This module does not request any runtime permission.*
 
 ## 🧩 APIs
 
@@ -68,47 +59,28 @@ An ES (JavaScript & TypeScript) module to list permutations and combinations fro
   function combinationMatrix<K, V>(set: Map<K, V[]>): Generator<Map<K, V>>;
   ```
 - ```ts
-  function combinationSet<T>(set: T[] | Set<T>, options: SetationSetOptions = {}): Generator<T[]>;
+  function combinationSet<T>(set: T[] | Set<T>, options?: SetationSetOptions): Generator<T[]>;
   ```
 - ```ts
-  function permutationSet<T>(set: T[] | Set<T>, options: SetationSetOptions = {}): Generator<T[]>;
+  function permutationSet<T>(set: T[] | Set<T>, options?: SetationSetOptions): Generator<T[]>;
   ```
 - ```ts
   interface SetationSetOptions {
-    /**
-     * Whether to allow the same element repeat appear in the same subset.
-     * 
-     * When this value is `true`, require property `size`.
-     * @default false
-     */
     allowRepeat?: boolean;
-    /**
-     * Fixed size of the subset.
-     * @default undefined
-     */
     size?: number | number[] | SetationSetSizeOptions;
   }
   ```
 - ```ts
   interface SetationSetSizeOptions {
-    /**
-     * Maximum size of the subset.
-     */
     maximum: number;
-    /**
-     * Minimum size of the subset.
-     */
     minimum: number;
   }
   ```
 
-> **ℹ️ Note**
->
-> For the prettier documentation, can visit via:
->
-> - [Deno CLI `deno doc`](https://deno.land/manual/tools/documentation_generator)
-> - [JSR](https://jsr.io/@hugoalh/setation)
-
+> [!NOTE]
+> - For the full or prettier documentation, can visit via:
+>   - [Deno CLI `deno doc`](https://docs.deno.com/runtime/reference/cli/documentation_generator/)
+>   - [JSR](https://jsr.io/@hugoalh/setation)
 
 ## ✍️ Examples
 

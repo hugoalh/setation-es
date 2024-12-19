@@ -4,8 +4,8 @@ title: "Setation (ES)"
 message: "If you use this software, please cite it using the metadata from this file."
 type: "software"
 authors:
-  - name: "hugoalh Studio"
-repository-code: "https://github.com/hugoalh-studio/setation-es"
+  - name: "hugoalh"
+repository-code: "https://github.com/hugoalh/setation-es"
 keywords:
   - "combination"
   - "es"

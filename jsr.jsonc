@@ -7,7 +7,8 @@
 		"./set": "./set.ts",
 		".": "./mod.ts"
 	},
-	"imports": { },
+	"imports": {
+	},
 	"publish": {
 		"exclude": [
 			"**/*_bench.ts",
@@ -22,13 +23,14 @@
 			"**/bench.tsx",
 			"**/test.ts",
 			"**/test.tsx",
-			".dnt.ts",
-			"npm/**"
+			"npm/**",
+			".dnt.ts"
 		],
 		"include": [
 			"**/*.json",
 			"**/*.ts",
 			"**/*.tsx",
+			"**/*.wasm",
 			"jsr.jsonc",
 			"LICENSE*.md",
 			"README*.md"

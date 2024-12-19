@@ -1,4 +1,4 @@
-import { assertEquals } from "STD/assert/assert-equals";
+import { assertEquals } from "STD/assert/equals";
 import { combinationMatrix } from "./matrix.ts";
 Deno.test("0 Map", { permissions: "none" }, () => {
 	const result = Array.from(combinationMatrix(new Map()));
