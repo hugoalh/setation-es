@@ -6,7 +6,7 @@
 [![JSR: @hugoalh/setation](https://img.shields.io/jsr/v/@hugoalh/setation?label=@hugoalh/setation&labelColor=F7DF1E&logo=jsr&logoColor=000000&style=flat "JSR: @hugoalh/setation")](https://jsr.io/@hugoalh/setation)
 [![NPM: @hugoalh/setation](https://img.shields.io/npm/v/@hugoalh/setation?label=@hugoalh/setation&labelColor=CB3837&logo=npm&logoColor=ffffff&style=flat "NPM: @hugoalh/setation")](https://www.npmjs.com/package/@hugoalh/setation)
 
-An ES (JavaScript & TypeScript) module to list permutations or combinations from the collection or set.
+An ECMAScript (JavaScript & TypeScript) module to list permutations or combinations from the collection or set.
 
 ## 🔰 Begin
 
