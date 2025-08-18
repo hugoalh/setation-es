@@ -3,5 +3,5 @@ export {
 	combinationSet,
 	permutationSet,
 	type SetationSetOptions,
-	type SetationSetSizeRange,
+	type SetationSetSizeRange
 } from "./set.ts";

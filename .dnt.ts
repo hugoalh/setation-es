@@ -11,13 +11,6 @@ await invokeDenoNodeJSTransformer({
 	entrypoints: configJSR.getExports(),
 	fixInjectedImports: true,
 	generateDeclarationMap: true,
-	mappings: {
-		"https://raw.githubusercontent.com/hugoalh/sort-es/v0.1.1/numerics.ts": {
-			name: "@hugoalh/sort",
-			version: "^0.1.1",
-			subPath: "numerics"
-		}
-	},
 	metadata: {
 		name: configJSR.getName(),
 		version: configJSR.getVersion(),
@@ -41,7 +34,6 @@ await invokeDenoNodeJSTransformer({
 		scripts: {
 		},
 		engines: {
-			node: ">=16.13.0"
 		},
 		private: false,
 		publishConfig: {

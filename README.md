@@ -12,12 +12,11 @@ An ECMAScript (JavaScript & TypeScript) module to list permutations or combinati
 
 ### 🎯 Targets
 
-|  | **Remote** | **JSR** | **NPM** |
-|:--|:--|:--|:--|
-| **[Bun](https://bun.sh/)** >= v1.1.0 | ❌ | ❓ | ✔️ |
-| **[Cloudflare Workers](https://workers.cloudflare.com/)** | ❌ | ❓ | ✔️ |
-| **[Deno](https://deno.land/)** >= v1.42.0 | ✔️ | ✔️ | ✔️ |
-| **[NodeJS](https://nodejs.org/)** >= v16.13.0 | ❌ | ❓ | ✔️ |
+| **Targets** | **Remote** | **JSR** | **NPM** |
+|:--|:-:|:-:|:-:|
+| **[Bun](https://bun.sh/)** >= v1.1.0 | ❌ | ✔️ | ✔️ |
+| **[Deno](https://deno.land/)** >= v2.1.0 | ✔️ | ✔️ | ✔️ |
+| **[NodeJS](https://nodejs.org/)** >= v20.9.0 | ❌ | ✔️ | ✔️ |
 
 > [!NOTE]
 > - It is possible to use this module in other methods/ways which not listed in here, however those methods/ways are not officially supported, and should beware maybe cause security issues.
@@ -55,15 +54,14 @@ An ECMAScript (JavaScript & TypeScript) module to list permutations or combinati
 ## 🧩 APIs
 
 - ```ts
-  function combinationCollection<V>(item: { [x: string]: V[]; }): Generator<{ [x: string]: V; }>;
-  function combinationCollection<K, V>(item: Map<K, V[]>): Generator<Map<K, V>>;
-  function combinationCollection<V>(item: Record<string, V[]>): Generator<Record<string, V>>;
+  function combinationCollection<K, V>(item: Map<K, readonly V[]>): Generator<Map<K, V>>;
+  function combinationCollection<K extends string, V>(item: Record<K, readonly V[]>): Generator<Record<K, V>>;
   ```
 - ```ts
-  function combinationSet<T>(set: readonly T[] | Set<T>, size: number | number[] | SetationSetSizeRange, options?: SetationSetOptions): Generator<T[]>
+  function combinationSet<T>(set: readonly T[] | Set<T>, size: number | readonly number[] | SetationSetSizeRange, options?: SetationSetOptions): Generator<T[]>;
   ```
 - ```ts
-  function permutationSet<T>(set: readonly T[] | Set<T>, size: number | number[] | SetationSetSizeRange, options?: SetationSetOptions): Generator<T[]>
+  function permutationSet<T>(set: readonly T[] | Set<T>, size: number | readonly number[] | SetationSetSizeRange, options?: SetationSetOptions): Generator<T[]>;
   ```
 
 > [!NOTE]
