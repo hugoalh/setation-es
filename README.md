@@ -4,8 +4,8 @@
 
 🔗
 [GitHub](https://github.com/hugoalh/setation-es)
-[JSR](https://jsr.io/@hugoalh/setation)
-[NPM](https://www.npmjs.com/package/@hugoalh/setation)
+● [JSR](https://jsr.io/@hugoalh/setation)
+● [NPM](https://www.npmjs.com/package/@hugoalh/setation)
 
 An ECMAScript module to list permutations or combinations from the collection or set.
 
