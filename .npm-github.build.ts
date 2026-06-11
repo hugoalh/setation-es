@@ -1,0 +1,41 @@
+import { invokeDenoNodeJSTransformer } from "DNT";
+import { parse as parseJSONC } from "STD_JSONC";
+const jsrManifest = parseJSONC(await Deno.readTextFile(new URL(import.meta.resolve("./jsr.jsonc"))));
+await invokeDenoNodeJSTransformer({
+	copyEntries: [
+		"LICENSE.md",
+		"README.md"
+	],
+	//@ts-ignore Lazy type.
+	entrypointsScript: jsrManifest.exports,
+	generateDeclarationMap: true,
+	metadata: {
+		//@ts-ignore Lazy type.
+		name: jsrManifest.name,
+		//@ts-ignore Lazy type.
+		version: jsrManifest.version,
+		description: "A module to list permutations or combinations from the collection or set.",
+		keywords: [
+			"combination",
+			"permutation",
+			"set",
+			"setation"
+		],
+		homepage: "https://github.com/hugoalh/setation-es#readme",
+		bugs: {
+			url: "https://github.com/hugoalh/setation-es/issues"
+		},
+		license: "MIT",
+		author: "hugoalh",
+		repository: {
+			type: "git",
+			url: "git+https://github.com/hugoalh/setation-es.git"
+		},
+		private: false,
+		publishConfig: {
+			access: "public"
+		}
+	},
+	outputDirectory: "dist/npm-github",
+	outputDirectoryPreEmpty: true
+});
