@@ -28,21 +28,21 @@ await invokeDenoNodeJSTransformer({
 			"set",
 			"setation"
 		],
-		homepage: "https://github.com/hugoalh/setation-es#readme",
+		homepage: "https://codeberg.org/hugoalh/setation-es#readme",
 		bugs: {
-			url: "https://github.com/hugoalh/setation-es/issues"
+			url: "https://codeberg.org/hugoalh/setation-es/issues"
 		},
 		license: "MIT",
 		author: "hugoalh",
 		repository: {
 			type: "git",
-			url: "git+https://github.com/hugoalh/setation-es.git"
+			url: "git+https://codeberg.org/hugoalh/setation-es.git"
 		},
 		private: false,
 		publishConfig: {
 			access: "public"
 		}
 	},
-	outputDirectory: "dist/npm-npm",
+	outputDirectory: "dist/npm-codeberg",
 	outputDirectoryPreEmpty: true
 });

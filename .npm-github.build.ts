@@ -9,6 +9,13 @@ await invokeDenoNodeJSTransformer({
 	//@ts-ignore Lazy type.
 	entrypointsScript: jsrManifest.exports,
 	generateDeclarationMap: true,
+	mappings: {
+		"https://raw.githubusercontent.com/hugoalh/sort-es/v0.4.0/compare.ts": {
+			name: "@hugoalh/sort",
+			version: "^0.4.0",
+			subPath: "compare"
+		}
+	},
 	metadata: {
 		//@ts-ignore Lazy type.
 		name: jsrManifest.name,

@@ -3,7 +3,8 @@
 [**⚖️** MIT](./LICENSE.md)
 
 🔗
-[GitHub](https://github.com/hugoalh/setation-es)
+[DistBoard @hugoalh](https://hugoalh.github.io/distboard/setation_ecmascript)
+● [GitHub](https://github.com/hugoalh/setation-es)
 ● [JSR](https://jsr.io/@hugoalh/setation)
 ● [NPM](https://www.npmjs.com/package/@hugoalh/setation)
 
