@@ -14,7 +14,7 @@ Deno.test("0 Setation", { permissions: "none" }, () => {
 	deepStrictEqual(Array.from(permutationSet([], [])), []);
 });
 Deno.test("6 Combination AllowRepeat 3", { permissions: "none" }, () => {
-	deepStrictEqual((Array.from(combinationSet(set6, 3, { allowRepeat: true }))).length, 56);
+	deepStrictEqual(Array.from(combinationSet(set6, 3, { allowRepeat: true })).length, 56);
 });
 Deno.test("6 Combination NoRepeat 3", { permissions: "none" }, () => {
 	deepStrictEqual(Array.from(combinationSet(set6, 3)), [
@@ -41,22 +41,22 @@ Deno.test("6 Combination NoRepeat 3", { permissions: "none" }, () => {
 	]);
 });
 Deno.test("6 Combination NoRepeat 6", { permissions: "none" }, () => {
-	deepStrictEqual((Array.from(combinationSet(set6, 6))).length, 1);
+	deepStrictEqual(Array.from(combinationSet(set6, 6)).length, 1);
 });
 Deno.test("6 Combination NoRepeat 3,6", { permissions: "none" }, () => {
-	deepStrictEqual((Array.from(combinationSet(set6, [3, 6]))).length, 21);
+	deepStrictEqual(Array.from(combinationSet(set6, [3, 6])).length, 21);
 });
 Deno.test("6 Permutation AllowRepeat 3", { permissions: "none" }, () => {
-	deepStrictEqual((Array.from(permutationSet(set6, 3, { allowRepeat: true }))).length, 216);
+	deepStrictEqual(Array.from(permutationSet(set6, 3, { allowRepeat: true })).length, 216);
 });
 Deno.test("6 Permutation NoRepeat 3", { permissions: "none" }, () => {
-	deepStrictEqual((Array.from(permutationSet(set6, 3))).length, 120);
+	deepStrictEqual(Array.from(permutationSet(set6, 3)).length, 120);
 });
 Deno.test("6 Permutation NoRepeat 6", { permissions: "none" }, () => {
-	deepStrictEqual((Array.from(permutationSet(set6, 6))).length, 720);
+	deepStrictEqual(Array.from(permutationSet(set6, 6)).length, 720);
 });
 Deno.test("6 Permutation NoRepeat 3,6", { permissions: "none" }, () => {
-	deepStrictEqual((Array.from(permutationSet(set6, [3, 6]))).length, 840);
+	deepStrictEqual(Array.from(permutationSet(set6, [3, 6])).length, 840);
 });
 Deno.test("6 Permutation NoRepeat 9", { permissions: "none" }, () => {
 	throws(() => {
