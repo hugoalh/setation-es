@@ -11,7 +11,7 @@ function* setationCollectionIterator<K, V>(item: readonly (readonly [K, readonly
 		...itemRest
 	]: readonly (readonly [K, readonly V[]])[] = item;
 	for (const value of values) {
-		const chainNew = new Map<K, V>(chain);
+		const chainNew: Map<K, V> = new Map<K, V>(chain);
 		chainNew.set(key, value);
 		if (itemRest.length > 0) {
 			yield* setationCollectionIterator(itemRest, chainNew);
