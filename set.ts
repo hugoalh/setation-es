@@ -6,55 +6,6 @@ export interface SetationSetOptions {
 	 */
 	allowRepeat?: boolean;
 }
-class SetationSetIndexIterator {
-	#allowRepeat: boolean;
-	#size: number;
-	constructor(size: number, options: Required<SetationSetOptions>) {
-		this.#allowRepeat = options.allowRepeat;
-		this.#size = size;
-	}
-	*iterate(item: readonly number[], chain: number[] = []): Generator<number[]> {
-		if (!(item.length > 0)) {
-			yield chain;
-			return;
-		}
-		for (const element of item) {
-			const chainNew: number[] = [...chain, element];
-			if (chainNew.length === this.#size) {
-				yield chainNew;
-				continue;
-			}
-			const itemRest: readonly number[] = this.#allowRepeat ? item : item.toSpliced(item.indexOf(element), 1);
-			if (itemRest.length > 0) {
-				yield* this.iterate(itemRest, chainNew);
-			} else {
-				yield chainNew;
-			}
-		}
-	}
-}
-function* setationSetIterator<T>(order: boolean, set: readonly T[], sizes: readonly number[], options: Required<SetationSetOptions>): Generator<T[]> {
-	for (const size of sizes) {
-		if (size === 0) {
-			yield [];
-			continue;
-		}
-		const tokens: Set<string> = new Set<string>();
-		for (const indexes of new SetationSetIndexIterator(size, options).iterate(set.map((_value: T, index: number): number => {
-			return index;
-		}))) {
-			const indexesFmt: readonly number[] = order ? indexes : indexes.sort(compareNumericsAscending);
-			const token: string = indexesFmt.join(",");
-			if (tokens.has(token)) {
-				continue;
-			}
-			tokens.add(token);
-			yield indexesFmt.map((index: number): T => {
-				return set[index];
-			});
-		}
-	}
-}
 export interface SetationSetSizeRange {
 	/**
 	 * Maximum size of the subset.
@@ -65,21 +16,21 @@ export interface SetationSetSizeRange {
 	 */
 	minimum: number;
 }
-function setationSet<T>(order: boolean, set: readonly T[] | Set<T>, size: number | readonly number[] | SetationSetSizeRange, options: SetationSetOptions = {}): Generator<T[]> {
+function* setationSet<T>(ordered: boolean, set: readonly T[] | Set<T>, size: number | readonly number[] | SetationSetSizeRange, options: SetationSetOptions = {}): Generator<T[]> {
 	const { allowRepeat = false }: SetationSetOptions = options;
-	const setFmt: readonly T[] = (set instanceof Set) ? Array.from(set.values()) : set;
-	const sizesResolve: number[] = [];
+	const setFmt: readonly T[] = Array.from((set instanceof Set) ? set.values() : set);
+	const sizes: number[] = [];
 	if (
 		typeof size === "number" ||
 		Array.isArray(size)
 	) {
-		Array.isArray(size) ? sizesResolve.push(...size) : sizesResolve.push(size);
-		for (const sizeResolve of sizesResolve) {
-			if (!(Number.isSafeInteger(sizeResolve) && sizeResolve >= 0)) {
-				throw new TypeError(`\`${sizeResolve}\` (parameter \`options.size\`) is not a number which is integer, positive, and safe!`);
+		Array.isArray(size) ? sizes.push(...size) : sizes.push(size);
+		for (const size of sizes) {
+			if (!(Number.isSafeInteger(size) && size >= 0)) {
+				throw new TypeError(`\`${size}\` (parameter \`options.size\`) is not a number which is integer, positive, and safe!`);
 			}
-			if (!allowRepeat && !(sizeResolve <= setFmt.length)) {
-				throw new RangeError(`Size \`${sizeResolve}\` is too large for the no elements repeat subset! Expect: <= ${setFmt.length}.`);
+			if (!allowRepeat && !(size <= setFmt.length)) {
+				throw new RangeError(`Size \`${size}\` is too large for the no elements repeat subset! Expect: <= ${setFmt.length}.`);
 			}
 		}
 	} else {
@@ -99,11 +50,49 @@ function setationSet<T>(order: boolean, set: readonly T[] | Set<T>, size: number
 		if (!(minimum <= maximum)) {
 			throw new RangeError(`Minimum size \`${minimum}\` is too large! Expect: <= ${maximum}.`);
 		}
-		for (let sizeResolve: number = minimum; sizeResolve <= maximum; sizeResolve += 1) {
-			sizesResolve.push(sizeResolve);
+		for (let n: number = minimum; n <= maximum; n += 1) {
+			sizes.push(n);
 		}
 	}
-	return setationSetIterator(order, setFmt, sizesResolve, { allowRepeat });
+	function* setationSetIndexIterate(item: readonly number[], size: number, chain: number[] = []): Generator<number[]> {
+		if (!(item.length > 0)) {
+			yield chain;
+			return;
+		}
+		for (const element of item) {
+			const chainNew: number[] = [...chain, element];
+			if (chainNew.length === size) {
+				yield chainNew;
+				continue;
+			}
+			const itemRest: readonly number[] = allowRepeat ? item : item.toSpliced(item.indexOf(element), 1);
+			if (itemRest.length > 0) {
+				yield* setationSetIndexIterate(itemRest, size, chainNew);
+			} else {
+				yield chainNew;
+			}
+		}
+	}
+	for (const size of sizes) {
+		if (size === 0) {
+			yield [];
+			continue;
+		}
+		const tokens: Set<string> = new Set<string>();
+		for (const indexes of setationSetIndexIterate(setFmt.map((_value: T, index: number): number => {
+			return index;
+		}), size)) {
+			const indexesFmt: readonly number[] = ordered ? indexes : indexes.sort(compareNumericsAscending);
+			const token: string = indexesFmt.join(",");
+			if (tokens.has(token)) {
+				continue;
+			}
+			tokens.add(token);
+			yield indexesFmt.map((index: number): T => {
+				return setFmt[index];
+			});
+		}
+	}
 }
 /**
  * List combinations from the set.
