@@ -6,6 +6,49 @@ export interface SetationSetOptions {
 	 */
 	allowRepeat?: boolean;
 }
+function* setationSetIterator<T>(ordered: boolean, set: readonly T[], sizes: readonly number[], options: Required<SetationSetOptions>): Generator<T[]> {
+	const { allowRepeat = false }: Required<SetationSetOptions> = options;
+	const setIndex: readonly number[] = set.map((_value: T, index: number): number => {
+		return index;
+	});
+	function* setationSetIndexIterator(size: number, chain: number[] = [], item: readonly number[] = setIndex): Generator<number[]> {
+		if (!(item.length > 0)) {
+			yield chain;
+			return;
+		}
+		for (const element of item) {
+			const chainNew: number[] = [...chain, element];
+			if (chainNew.length === size) {
+				yield chainNew;
+				continue;
+			}
+			const itemRest: readonly number[] = allowRepeat ? item : item.toSpliced(item.indexOf(element), 1);
+			if (itemRest.length > 0) {
+				yield* setationSetIndexIterator(size, chainNew, itemRest);
+			} else {
+				yield chainNew;
+			}
+		}
+	}
+	for (const size of sizes) {
+		if (size === 0) {
+			yield [];
+			continue;
+		}
+		const tokens: Set<string> = new Set<string>();
+		for (const indexes of setationSetIndexIterator(size)) {
+			const indexesFmt: readonly number[] = ordered ? indexes : indexes.sort(compareNumericsAscending);
+			const token: string = indexesFmt.join(",");
+			if (tokens.has(token)) {
+				continue;
+			}
+			tokens.add(token);
+			yield indexesFmt.map((index: number): T => {
+				return set[index];
+			});
+		}
+	}
+}
 export interface SetationSetSizeRange {
 	/**
 	 * Maximum size of the subset.
@@ -16,7 +59,7 @@ export interface SetationSetSizeRange {
 	 */
 	minimum: number;
 }
-function* setationSet<T>(ordered: boolean, set: readonly T[] | Set<T>, size: number | readonly number[] | SetationSetSizeRange, options: SetationSetOptions = {}): Generator<T[]> {
+function setationSet<T>(ordered: boolean, set: readonly T[] | Set<T>, size: number | readonly number[] | SetationSetSizeRange, options: SetationSetOptions = {}): Generator<T[]> {
 	const { allowRepeat = false }: SetationSetOptions = options;
 	const setFmt: readonly T[] = Array.from((set instanceof Set) ? set.values() : set);
 	const sizes: number[] = [];
@@ -54,45 +97,7 @@ function* setationSet<T>(ordered: boolean, set: readonly T[] | Set<T>, size: num
 			sizes.push(n);
 		}
 	}
-	function* setationSetIndexIterate(item: readonly number[], size: number, chain: number[] = []): Generator<number[]> {
-		if (!(item.length > 0)) {
-			yield chain;
-			return;
-		}
-		for (const element of item) {
-			const chainNew: number[] = [...chain, element];
-			if (chainNew.length === size) {
-				yield chainNew;
-				continue;
-			}
-			const itemRest: readonly number[] = allowRepeat ? item : item.toSpliced(item.indexOf(element), 1);
-			if (itemRest.length > 0) {
-				yield* setationSetIndexIterate(itemRest, size, chainNew);
-			} else {
-				yield chainNew;
-			}
-		}
-	}
-	for (const size of sizes) {
-		if (size === 0) {
-			yield [];
-			continue;
-		}
-		const tokens: Set<string> = new Set<string>();
-		for (const indexes of setationSetIndexIterate(setFmt.map((_value: T, index: number): number => {
-			return index;
-		}), size)) {
-			const indexesFmt: readonly number[] = ordered ? indexes : indexes.sort(compareNumericsAscending);
-			const token: string = indexesFmt.join(",");
-			if (tokens.has(token)) {
-				continue;
-			}
-			tokens.add(token);
-			yield indexesFmt.map((index: number): T => {
-				return setFmt[index];
-			});
-		}
-	}
+	return setationSetIterator(ordered, setFmt, sizes, { allowRepeat });
 }
 /**
  * List combinations from the set.
