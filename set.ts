@@ -1,4 +1,4 @@
-import { compareNumericsAscending } from "https://raw.githubusercontent.com/hugoalh/sort-es/v0.4.0/compare.ts";
+import { compareNumericsAscending } from "jsr:@hugoalh/sort@^0.4.0/compare";
 export interface SetationSetOptions {
 	/**
 	 * Whether to allow the elements repeat appear in the same subset.

@@ -12,7 +12,7 @@ await transform({
 	entrypointsScript: manifest.exports,
 	generateDeclarationMap: true,
 	mappings: {
-		"https://raw.githubusercontent.com/hugoalh/sort-es/v0.4.0/compare.ts": {
+		"jsr:@hugoalh/sort@^0.4.0/compare": {
 			name: "@hugoalh/sort",
 			version: "^0.4.0",
 			subPath: "compare"
