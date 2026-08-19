@@ -4,12 +4,11 @@
 	"version": "2.0.2",
 	"license": "MIT",
 	"exports": {
+		".": "./mod.ts",
 		"./collection": "./collection.ts",
-		"./set": "./set.ts",
-		".": "./mod.ts"
+		"./set": "./set.ts"
 	},
 	"imports": {
-		"https://raw.githubusercontent.com/hugoalh/sort-es/v0.4.0/compare.ts": "jsr:@hugoalh/sort@^0.4.0/compare"
 	},
 	"publish": {
 		"exclude": [
